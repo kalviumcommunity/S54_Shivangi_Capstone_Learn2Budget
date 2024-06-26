@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const connectToDB = require('./config/dbConnection');
 const app = express();
 require('dotenv').config();
 const port = process.env.PORT || 3000;
@@ -12,6 +13,14 @@ app.use(cors({
   }));
 
 app.use(express.json());
+
+connectToDB()
+.then(() => {
+    console.log('Connected to MongoDB');
+})
+.catch((err) => {
+    console.error('Failed to connect to MongoDB', err);
+});
 
 app.get('/ping', (req, res) => {
     res.send("pong");
